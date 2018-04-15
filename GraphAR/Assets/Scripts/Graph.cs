@@ -6,101 +6,116 @@ using org.mariuszgromada.math.mxparser; //@Source: http://mathparser.org/
 public class Graph : MonoBehaviour {
 
 	public Transform pointPrefab;
+	public GameObject graph;
 	public float resolution;
-	public string customFuncString;
+	public string funcString; //pre-defined function choices: Parabola, Bumps, Boobs
 	public bool customFuncEnabled;
 
 	private int twoDorThreeD; //0 = 2d function, 1 = 3d function
 	private Function f;
+	private bool hasNegativeValues; //used to determine whether there is a need to take out part of y axis
 
-	//pre-defined function choices
-	public enum String {
-		Parabola,
-		Bumps,
-        Boobs
+	void awake() {
+		run ();
 	}
-	public String preDefFunction;
 
-	void Awake () {
-		Vector3 scale = Vector3.one / (resolution * 5f);
+//	public Graph(string funcString, bool customFuncEnabled) {
+//		this.funcString = funcString;
+//		this.customFuncEnabled = customFuncEnabled;
+//		run ();
+//	}
+
+
+	public void scaleGraph(float scale) {
+		graph.transform.localScale = graph.transform.localScale * scale;
+	}
+
+	void run () {
+		hasNegativeValues = false;
+		Vector3 scale = Vector3.one / (resolution * 6f);
 		Vector3 position;
 
 		if (customFuncEnabled) {
-			f = generateFunction (customFuncString);
+			f = generateFunction (funcString);
 			if (twoDorThreeD == 0) { //only dependent on x
 				for (float x = -10f; x <= 10f; x = x + 1f / resolution) {
 					Transform point = Instantiate (pointPrefab);
+					point.parent = graph.transform;
 					position.x = x / 8f;
 					position.z = 0;
 					position.y = customFunc2D (position.x);
+					checkPosNeg (position.y);
 					point.localPosition = position;
 					point.localScale = scale;
 				}
 			} else {
-				for (float x = -10f; x <= 10f; x = x + 1f / resolution)
-				{
-					for (float z = -10f; z <= 10f; z = z + 1f / resolution)
-					{
-						Transform point = Instantiate(pointPrefab);
+				for (float x = -10f; x <= 10f; x = x + 1f / resolution) {
+					for (float z = -10f; z <= 10f; z = z + 1f / resolution) {
+						Transform point = Instantiate (pointPrefab);
+						point.parent = graph.transform;
 						position.x = x / 8f;
 						position.z = z / 8f;
-						position.y = customFunc3D(position.x, position.z);
+						position.y = customFunc3D (position.x, position.z);
+						checkPosNeg (position.y);
 						point.localPosition = position;
 						point.localScale = scale;
 					}
 				}
 			}
-			return;
+		} else {
+
+			//for pre-defined functions
+			if (funcString == "Parabola") {
+				for (float x = -5f; x < 5f; x = x + 1f / resolution) {
+					Transform point = Instantiate (pointPrefab);
+					point.parent = graph.transform;
+					position.x = (x) / 5f;
+					position.z = 0;
+					position.y = funcParabola (position.x);
+					checkPosNeg (position.y);
+					point.localPosition = position;
+					point.localScale = scale;
+				}
+			} else if (funcString == "Bumps") {
+				for (float x = -5f; x < 5f; x = x + 1f / resolution) {
+					for (float z = -5f; z < 5f; z = z + 1f / resolution) {
+						Transform point = Instantiate (pointPrefab);
+						point.parent = graph.transform;
+						position.x = (x + 0.5f) / 5f - 1f;
+						position.z = (z + 0.5f) / 5f - 1f;
+						position.y = funcBumps (position.x, position.z);
+						checkPosNeg (position.y);
+						point.localPosition = position;
+						point.localScale = scale;
+					}
+				}
+			} else if (funcString == "Boobs") {
+				for (float x = 0f; x < 50f; x = x + 1f / resolution) {
+					for (float z = -20f; z < 20f; z = z + 1f / resolution) {
+						Transform point = Instantiate (pointPrefab);
+						point.parent = graph.transform;
+						position.x = (x + 0.5f) / 5f - 1f;
+						position.z = (z + 0.5f) / 5f - 1f;
+						position.y = funcBoobs (position.x, position.z);
+						checkPosNeg (position.y);
+						point.localPosition = position;
+						point.localScale = scale;
+					}
+				}
+			}
 		}
 
-		//for pre-defined functions
-        if (preDefFunction.ToString() == "Parabola")
-        {
-            for (float x = -5f; x < 5f; x = x + 1f / resolution)
-            {
-                Transform point = Instantiate(pointPrefab);
-                position.x = (x) / 5f;
-                position.z = 0;
-                position.y = funcParabola(position.x);
-                point.localPosition = position;
-                point.localScale = scale;
-            }
-        }
-		else if (preDefFunction.ToString() == "Bumps")
-        {
-            for (float x = -5f; x < 5f; x = x + 1f / resolution)
-            {
-                for (float z = -5f; z < 5f; z = z + 1f / resolution)
-                {
-                    Transform point = Instantiate(pointPrefab);
-                    position.x = (x + 0.5f) / 5f - 1f;
-                    position.z = (z + 0.5f) / 5f - 1f;
-                    position.y = funcBumps(position.x, position.z);
-                    point.localPosition = position;
-                    point.localScale = scale;
-                }
-            }
-        }
-		else if (preDefFunction.ToString() == "Boobs")
-        {
-            for (float x = 0f; x < 50f; x = x + 1f / resolution)
-            {
-                for (float z = -20f; z < 20f; z = z + 1f / resolution)
-                {
-                    Transform point = Instantiate(pointPrefab);
-                    position.x = (x + 0.5f) / 5f - 1f;
-                    position.z = (z + 0.5f) / 5f - 1f;
-                    position.y = funcBoobs(position.x, position.z);
-                    point.localPosition = position;
-                    point.localScale = scale;
-                }
-            }
+		if (!hasNegativeValues) {
+			//DrawAxis.negative = false
+			Debug.Log ("rip");
+			graph.transform.position = new Vector3(transform.position.x, graph.transform.position.y - 10f/8f, transform.position.z);
+			//scaleGraph (3f);
 		}
 	
 	}
 
 	Function generateFunction(string func) {
-		//decide whether 2d or 3d function
+		//decide whether to draw 2d or 3d function
 		if (func.IndexOf ("z") == -1) {
 			twoDorThreeD = 0;
 		} else {
@@ -109,12 +124,11 @@ public class Graph : MonoBehaviour {
 		return new Function(func);
 	}
 
-
-//	void parserTest() {
-//		Function f = new Function(customFunction);
-//		Expression e = new Expression("f(2, 4)", f);
-//		Debug.Log("Res 1: " + e.getExpressionString() + " = " + e.calculate());
-//	}
+	void checkPosNeg(float pos) {
+		if (pos < 0) {
+			hasNegativeValues = true;
+		}
+	}
 		
 
 	float funcBumps(float x, float z) {
@@ -141,7 +155,7 @@ public class Graph : MonoBehaviour {
 
 	float customFunc3D (float x, float y) {
 		Expression e = new Expression ("f(" + x + "," + y + ")", f);
-		return (float)e.calculate();
+		return (float)e.calculate ();
 	}
 
 
