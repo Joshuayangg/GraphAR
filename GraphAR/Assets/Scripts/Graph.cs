@@ -1,24 +1,61 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using org.mariuszgromada.math.mxparser; //@Source: http://mathparser.org/
 
 public class Graph : MonoBehaviour {
 
 	public Transform pointPrefab;
 	public float resolution;
+	public string customFuncString;
+	public bool customFuncEnabled;
+
+	private int twoDorThreeD; //0 = 2d function, 1 = 3d function
+	private Function f;
+
+	//pre-defined function choices
 	public enum String {
 		Parabola,
 		Bumps,
         Boobs
 	}
-	public String function;
+	public String preDefFunction;
 
 	void Awake () {
-		Vector3 scale = Vector3.one / (resolution * 8f);
+		Vector3 scale = Vector3.one / (resolution * 5f);
 		Vector3 position;
-        if ((function.ToString() == "Parabola"))
+
+		if (customFuncEnabled) {
+			f = generateFunction (customFuncString);
+			if (twoDorThreeD == 0) { //only dependent on x
+				for (float x = -10f; x <= 10f; x = x + 1f / resolution) {
+					Transform point = Instantiate (pointPrefab);
+					position.x = x / 8f;
+					position.z = 0;
+					position.y = customFunc2D (position.x);
+					point.localPosition = position;
+					point.localScale = scale;
+				}
+			} else {
+				for (float x = -10f; x <= 10f; x = x + 1f / resolution)
+				{
+					for (float z = -10f; z <= 10f; z = z + 1f / resolution)
+					{
+						Transform point = Instantiate(pointPrefab);
+						position.x = x / 8f;
+						position.z = z / 8f;
+						position.y = customFunc3D(position.x, position.z);
+						point.localPosition = position;
+						point.localScale = scale;
+					}
+				}
+			}
+			return;
+		}
+
+		//for pre-defined functions
+        if (preDefFunction.ToString() == "Parabola")
         {
-            Debug.Log("hi");
             for (float x = -5f; x < 5f; x = x + 1f / resolution)
             {
                 Transform point = Instantiate(pointPrefab);
@@ -29,11 +66,11 @@ public class Graph : MonoBehaviour {
                 point.localScale = scale;
             }
         }
-        else if (function.ToString() == "Bumps")
+		else if (preDefFunction.ToString() == "Bumps")
         {
             for (float x = -5f; x < 5f; x = x + 1f / resolution)
             {
-                for (float z = 0f; z < 10f; z = z + 1f / resolution)
+                for (float z = -5f; z < 5f; z = z + 1f / resolution)
                 {
                     Transform point = Instantiate(pointPrefab);
                     position.x = (x + 0.5f) / 5f - 1f;
@@ -44,11 +81,11 @@ public class Graph : MonoBehaviour {
                 }
             }
         }
-        else if (function.ToString() == "Boobs")
+		else if (preDefFunction.ToString() == "Boobs")
         {
-            for (float x = -100f; x < 100f; x = x + 1f / resolution)
+            for (float x = 0f; x < 50f; x = x + 1f / resolution)
             {
-                for (float z = 0f; z < 50f; z = z + 1f / resolution)
+                for (float z = -20f; z < 20f; z = z + 1f / resolution)
                 {
                     Transform point = Instantiate(pointPrefab);
                     position.x = (x + 0.5f) / 5f - 1f;
@@ -61,6 +98,24 @@ public class Graph : MonoBehaviour {
 		}
 	
 	}
+
+	Function generateFunction(string func) {
+		//decide whether 2d or 3d function
+		if (func.IndexOf ("z") == -1) {
+			twoDorThreeD = 0;
+		} else {
+			twoDorThreeD = 1;
+		}
+		return new Function(func);
+	}
+
+
+//	void parserTest() {
+//		Function f = new Function(customFunction);
+//		Expression e = new Expression("f(2, 4)", f);
+//		Debug.Log("Res 1: " + e.getExpressionString() + " = " + e.calculate());
+//	}
+		
 
 	float funcBumps(float x, float z) {
 		float y = (Mathf.Sin(5f * x) * Mathf.Cos(5f * z)) / 5f;
@@ -78,6 +133,16 @@ public class Graph : MonoBehaviour {
         Debug.Log(y);
         return y;
     }
+
+	float customFunc2D (float x) {
+		Expression e = new Expression ("f(" + x + ")", f);
+		return (float)e.calculate();
+	}
+
+	float customFunc3D (float x, float y) {
+		Expression e = new Expression ("f(" + x + "," + y + ")", f);
+		return (float)e.calculate();
+	}
 
 
 

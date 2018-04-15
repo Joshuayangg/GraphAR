@@ -288,8 +288,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointPrefab: {fileID: 4510791204467392, guid: 926ab86e018cf4081a2d917d7266234a,
     type: 2}
-  resolution: 15
-  function: 1
+  resolution: 2
+  customFuncString: f(x,z) = x^2 + z*2
+  customFuncEnabled: 1
+  preDefFunction: 0
 --- !u!4 &1316472125
 Transform:
   m_ObjectHideFlags: 0
@@ -320,7 +322,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!199 &2086140051
 ParticleSystemRenderer:
   serializedVersion: 4
@@ -435,7 +437,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1762838342
+  randomSeed: 1728180015
   InitialModule:
     serializedVersion: 3
     enabled: 1
