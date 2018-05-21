@@ -389,7 +389,7 @@ MonoBehaviour:
     type: 2}
   graph: {fileID: 1152848547}
   resolution: 1
-  funcString: f(x,z) = x + z
+  funcString: f(x) = sqrt((x*8))
   customFuncEnabled: 1
 --- !u!4 &1152848552
 Transform:

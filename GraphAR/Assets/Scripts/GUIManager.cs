@@ -23,6 +23,18 @@ public class GUIManager : MonoBehaviour {
 
 	public void begin() {
 		function = input.text;
+
+        //"normalize" variable input by rotating entire graph based on var inputs
+        if (function.IndexOf('x') != -1 && function.IndexOf('y') != -1)
+        {
+            //rotate graph z by 90 deg (done by rotating parent of meshes)
+            function.Replace('y', 'z');
+
+        } else if (function.IndexOf('y') != -1 && function.IndexOf('z') != -1) {
+            //rotate graph x by 90 deg
+            function.Replace('y', 'x');
+
+        }
 		g.MeshRender ();
 	}
 }
