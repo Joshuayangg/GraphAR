@@ -27,6 +27,7 @@ Shader "Custom/CameraDiffuse"
             // light data set up; light direction in _WorldSpaceLightPos0
             // and color in _LightColor0
             Tags {"LightMode"="ForwardBase"}
+            Cull Off
 
             CGPROGRAM
             #pragma vertex vert
@@ -53,8 +54,8 @@ Shader "Custom/CameraDiffuse"
                 // compute world space view direction
                 float3 worldViewDir = normalize(UnityWorldSpaceViewDir(worldPos));
                 // dot product between normal and light direction for
-                // standard diffuse (Lambert) lighting
-                half nl = max(0, dot(worldNormal, worldViewDir));
+                // standard diffuse (Lambert) lighting "(support double-sided material)" 
+                half nl = abs(dot(worldNormal, worldViewDir));
                 
                 // factor in the material color
                 o.diff = lerp(_MaterialColor, nl * _MaterialColor, 0.2);

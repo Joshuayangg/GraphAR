@@ -16,14 +16,20 @@ public class Graph : MonoBehaviour {
 	private bool hasNegativeValues; //used to determine whether there is a need to take out part of y axis
 
 	void awake() {
+        Debug.Log("hi");
 		run ();
 	}
 
-//	public Graph(string funcString, bool customFuncEnabled) {
-//		this.funcString = funcString;
-//		this.customFuncEnabled = customFuncEnabled;
-//		run ();
-//	}
+	private void Start()
+	{
+        Debug.Log("hi");
+        run();
+	}
+
+	void Update()
+	{
+        
+	}
 
 
 	public void scaleGraph(float scale) {
@@ -45,8 +51,11 @@ public class Graph : MonoBehaviour {
 					position.z = 0;
 					position.y = customFunc2D (position.x);
 					checkPosNeg (position.y);
-					point.localPosition = position;
-					point.localScale = scale;
+                    if (!double.IsNaN(position.y))
+                    {
+                        point.localPosition = position; //update: checks whether y pos is devide by 0
+                        point.localScale = scale;
+                    }
 				}
 			} else {
 				for (float x = -10f; x <= 10f; x = x + 1f / resolution) {
@@ -89,8 +98,8 @@ public class Graph : MonoBehaviour {
 						point.localScale = scale;
 					}
 				}
-			} else if (funcString == "Boobs") {
-				for (float x = 0f; x < 50f; x = x + 1f / resolution) {
+			} else if (funcString == "Bobs") {
+				for (float x = -25f; x < 25f; x = x + 1f / resolution) {
 					for (float z = -20f; z < 20f; z = z + 1f / resolution) {
 						Transform point = Instantiate (pointPrefab);
 						point.parent = graph.transform;
@@ -121,6 +130,7 @@ public class Graph : MonoBehaviour {
 		} else {
 			twoDorThreeD = 1;
 		}
+        //func.Replace
 		return new Function(func);
 	}
 

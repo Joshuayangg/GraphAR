@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4169582747025834}
-  - component: {fileID: 114260645635680452}
+  - component: {fileID: 114015790878076588}
   m_Layer: 0
   m_Name: DefaultPlaneIndicator
   m_TagString: Untagged
@@ -84,6 +84,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 1d214ea2059394d59a1960df0cad1c62, type: 2}
   m_StaticBatchInfo:
@@ -112,7 +113,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1497045824638220}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114260645635680452
+--- !u!114 &114015790878076588
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -120,9 +121,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1353731089078378}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1919018902, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Script: {fileID: 697333272, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mTrackableName: 
+  mPreserveChildSize: 0
+  mInitializedInEditor: 0
   mSelectedStageType: 0
   mPlaneReference: {fileID: 0}
   mMidAirReference: {fileID: 0}
