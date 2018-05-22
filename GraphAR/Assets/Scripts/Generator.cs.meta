@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: 2c4c3ab84783d4ee7a31e51712009ec9
-timeCreated: 1526847648
-licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - mesh: {instanceID: 0}
+  - pointPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
