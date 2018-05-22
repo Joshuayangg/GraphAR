@@ -22,13 +22,8 @@ public class Parser {
 		vertices = new Vector3[(points + 1) * (points + 1)];
 		for (int x = 0, v = 0; x <= points; x++) {
 			for (int z = 0; z <= points; z++) {
-                float y = y_calculator((x - gridOffset) * inv_resolution, (z - gridOffset) * inv_resolution);
-                if (double.IsNaN(y)) {
-                    Debug.Log("The value at (" + x + ", " + z + ")" + " is undefined.");
-                } else {
-                    vertices[v] = new Vector3((x - gridOffset) * inv_resolution,
-                                              y, (z - gridOffset) * inv_resolution);  
-                }
+				vertices [v] = new Vector3 ( (x - gridOffset) * inv_resolution,
+					y_calculator((x - gridOffset) * inv_resolution, (z - gridOffset) * inv_resolution), (z - gridOffset) * inv_resolution);
 				v += 1;
 			}
 		}

@@ -9,13 +9,12 @@ public class Generator : MonoBehaviour {
 	private Vector3[] vertices;
 	private int[] triangles;
 
-	//	void UpdateMesh() {
-	//		mesh.Clear ();
-	//		mesh.vertices = vertices;
-	//		mesh.triangles = triangles;
-	//		mesh.RecalculateNormals ();
-	//	}
-
+//	void UpdateMesh() {
+//		mesh.Clear ();
+//		mesh.vertices = vertices;
+//		mesh.triangles = triangles;
+//		mesh.RecalculateNormals ();
+//	}
 	public void Delete() {
 		mesh.Clear ();
 		mesh = null;

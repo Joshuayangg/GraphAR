@@ -4,4 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/3DFuncBumps.unity
+    guid: 3fe7776d82208430cab55c71b8663231
+  - enabled: 0
+    path: Assets/OldScenes/test.unity
+    guid: 3cbccfe616ab4451db7cc35244fd431e
+  - enabled: 1
+    path: Assets/Final.unity
+    guid: 6d138671b49464f269dd0b0f5bac7a05
