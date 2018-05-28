@@ -5,6 +5,7 @@ using UnityEngine;
 public class Parser
 {
     static Vector3[] vertices;
+    static int[] indices;
     static Function f;
     static string funcString;
     static float resolution = GUIManager.resolution;
@@ -44,6 +45,7 @@ public class Parser
         if (Generator.is3DFunc(funcString))
         {
             vertices = new Vector3[(points + 1) * (points + 1)];
+            indices = new int[(points + 1) * (points + 1)];
             for (int x = 0, v = 0; x <= points; x++)
             {
                 for (int z = 0; z <= points; z++)
@@ -55,8 +57,9 @@ public class Parser
                     }
                     else
                     {
-                        vertices[v] = new Vector3((x - gridOffset) * inv_resolution,
-                        y, (z - gridOffset) * inv_resolution);
+                        vertices[v] = new Vector3((x - gridOffset) * inv_resolution, y, (z - gridOffset) * inv_resolution);
+                        indices[v] = v;
+                        
                     }
                     v += 1;
                 }
@@ -65,6 +68,7 @@ public class Parser
         else
         {
             vertices = new Vector3[(points + 1)];
+            indices = new int[(points + 1)];
             for (int x = 0; x < points + 1; x++)
             {
                 float y = y_calculator((x - gridOffset) * inv_resolution) / 2f;
@@ -74,8 +78,9 @@ public class Parser
                 }
                 else
                 {
-                    vertices[x] = new Vector3((x - gridOffset) * inv_resolution,
-                                           y, 0);
+                    vertices[x] = new Vector3((x - gridOffset) * inv_resolution, y, 0);
+                    indices[x] = x;
+                    
                 }
             }
 
@@ -90,6 +95,13 @@ public class Parser
     {
         generateVertices();
         return vertices;
+    }
+
+    public static int[] getIndices() {
+        if (vertices == null) {
+            generateVertices();
+        }
+        return indices;
     }
 
     /* Rotates the graph and sets variables to x and z 

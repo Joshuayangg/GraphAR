@@ -44,7 +44,7 @@ public class Generator : MonoBehaviour {
         funcString = GUIManager.function;
         if (is3DFunc(funcString))
         {
-            MeshRender();
+            PointRender();
         }
         else
         {
@@ -53,21 +53,27 @@ public class Generator : MonoBehaviour {
 	}
 
 	public void PointRender() {
-		vertices = Parser.getVertices ();
-        float size = (float)GUIManager.resolution;
-        Transform parent = GameObject.FindWithTag("pointParent").transform;
-        scale.Set(size/10f, size/10f, size/10f);
-        parent.localScale = scale;
-		for (int i = 0; i < vertices.Length; i++) {
-			//for each point, generate a gameobject
-            Transform point = Instantiate(pointPrefab);
-            point.SetParent(parent);
-            point.localPosition = vertices[i];
-            point.localScale = scale / 9f;
-        }
-	}
-	
+        // vertices = Parser.getVertices ();
+        // float size = (float)GUIManager.resolution;
+        // Transform parent = GameObject.FindWithTag("pointParent").transform;
+        // scale.Set(size/10f, size/10f, size/10f);
+        // parent.localScale = scale;
+        // for (int i = 0; i < vertices.Length; i++) {
+        // 	//for each point, generate a gameobject
+        //     Transform point = Instantiate(pointPrefab);
+        //     point.SetParent(parent);
+        //     point.localPosition = vertices[i];
+        //     point.localScale = scale / 9f;
+        // }
+        mesh = new Mesh();
+        int numPoints = Parser.numPoints();
+        GetComponent<MeshFilter>().mesh = mesh;
 
+        Vector3[] points = Parser.getVertices();
+        int[] indices = Parser.getIndices();
+        mesh.vertices = points;
+        mesh.SetIndices(indices, MeshTopology.Points, 0);
+	}
 	public void MeshRender() {
         //setup
         GetComponent<MeshFilter>().transform.parent = parent; //setting parent to mesh??

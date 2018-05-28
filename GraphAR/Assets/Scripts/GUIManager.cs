@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GUIManager : MonoBehaviour
 {
-    public static string function = "f(x, z) = x + z";
+    public static string function = "f(x, z) = sin(x) + cos(z)";
     public static int resolution = 3;
     public static int gridSize = 10;
     public Generator g;
@@ -26,7 +26,7 @@ public class GUIManager : MonoBehaviour
 
     public void begin()
     {
-        function = input.text;
+        //function = input.text;
         g.render();
     }
 }
