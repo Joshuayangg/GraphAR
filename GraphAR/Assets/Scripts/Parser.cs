@@ -6,6 +6,7 @@ public class Parser
 {
     static Vector3[] vertices;
     static int[] indices;
+    static Color[] colors;
     static Function f;
     static string funcString;
     static float resolution = GUIManager.resolution;
@@ -13,6 +14,10 @@ public class Parser
     static int points = gridSize * (int)resolution;
     static float gridOffset = points / 2;
     static float inv_resolution = 1 / resolution;
+    public static Quaternion normalizationOffset;
+
+    static float maxY;
+    static float minY;
 
     /* Calculates y for 3D graphs */
     private static float y_calculator(float x, float z)
@@ -35,17 +40,22 @@ public class Parser
             Debug.Log("Input is invalid.");
             return 0f;
         }
-        return (float)e.calculate();
+        return (float) e.calculate();
     }
 
     static void generateVertices()
     {
         funcString = GUIManager.function;
         f = normalizeFunc(funcString);
+        maxY = Mathf.NegativeInfinity;
+        minY = Mathf.Infinity;
+
         if (Generator.is3DFunc(funcString))
         {
             vertices = new Vector3[(points + 1) * (points + 1)];
-            indices = new int[(points + 1) * (points + 1)];
+            indices = new int[vertices.Length];
+            colors = new Color[indices.Length];
+
             for (int x = 0, v = 0; x <= points; x++)
             {
                 for (int z = 0; z <= points; z++)
@@ -59,6 +69,7 @@ public class Parser
                     {
                         vertices[v] = new Vector3((x - gridOffset) * inv_resolution, y, (z - gridOffset) * inv_resolution);
                         indices[v] = v;
+                        updateMaxMinY(y);
                         
                     }
                     v += 1;
@@ -80,11 +91,31 @@ public class Parser
                 {
                     vertices[x] = new Vector3((x - gridOffset) * inv_resolution, y, 0);
                     indices[x] = x;
+                    updateMaxMinY(y);
                     
                 }
             }
 
         }
+        setColors();
+    }
+
+    static void updateMaxMinY(float y) {
+        if (y > maxY) {
+            maxY = y;
+        }
+        if (y < minY) {
+            minY = y;
+        }
+    }
+
+    static void setColors() {
+        for (int x = 0; x < indices.Length; x++) {
+            colors[x] = new Color(0.8f, normalize(vertices[x].y), 0.8f);
+        }
+    }
+    public static float normalize(float num) {
+        return (num - minY) / (maxY - minY);
     }
 
     public static int numPoints()
@@ -104,6 +135,15 @@ public class Parser
         return indices;
     }
 
+    public static Color[] getColors()
+    {
+        if (colors == null)
+        {
+            setColors();
+        }
+        return colors;
+    }
+
     /* Rotates the graph and sets variables to x and z 
      * based on which variables are inputed. Does not alter funcString. */
     public static Function normalizeFunc(string func)
@@ -117,13 +157,13 @@ public class Parser
             if (func.Contains("y"))
             {
                 //rotate around Z axis
-                parent.transform.Rotate(Vector3.forward * 90);
+                normalizationOffset = Quaternion.Euler(0, 90, 0);
                 func = func.Replace('y', 'x');
             }
             else if (func.Contains("z"))
             {
                 //rotate around Y axis
-                parent.transform.Rotate(Vector3.up * 90);
+                normalizationOffset = Quaternion.Euler(0, 90, 0);
                 func = func.Replace('y', 'x');
             }
         }
@@ -132,13 +172,13 @@ public class Parser
             if (func.Contains("y") && func.Contains("z"))
             {
                 //rotate around Z axis
-                parent.Rotate(Vector3.forward * 90);
+                normalizationOffset = Quaternion.Euler(0, 0, 90);
                 func = func.Replace('y', 'x');
             }
             else if (func.Contains("y"))
             {
                 //rotate around X axis
-                parent.Rotate(Vector3.right * 90);
+                normalizationOffset = Quaternion.Euler(90, 0, 0);
                 func = func.Replace('y', 'z');
             }
         }

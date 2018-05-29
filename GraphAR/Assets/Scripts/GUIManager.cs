@@ -16,7 +16,7 @@ public class GUIManager : MonoBehaviour
     public void updateText()
     {
         textField.text = input.text;
-        function = input.text;
+        //function = input.text;
     }
 
     public void delete()
