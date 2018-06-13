@@ -6,9 +6,15 @@ using org.mariuszgromada.math.mxparser;
 [RequireComponent (typeof(MeshFilter), typeof(MeshRenderer))]
 public class Generator : MonoBehaviour {
 	public Mesh mesh;
+    public Transform pointPrefab; //used for pointRender
+    private bool meshInstantiated = false;
 	private Vector3[] vertices;
 	private int[] triangles;
-
+    private Transform parent; //used for graph rotation
+    private string funcString;
+    private Vector3 initialScale;
+    private Vector3 initialPos;
+    private Quaternion rotation;
 //	void UpdateMesh() {
 //		mesh.Clear ();
 //		mesh.vertices = vertices;
@@ -16,54 +22,55 @@ public class Generator : MonoBehaviour {
 //		mesh.RecalculateNormals ();
 //	}
 	public void Delete() {
-		mesh.Clear ();
-		mesh = null;
-		vertices = null;
-		triangles = null;
+        parent.localScale = initialScale;
+        parent.localPosition = initialPos;
+        if (!is3DFunc(funcString))
+        {
+            foreach (Transform child in parent)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        if (meshInstantiated) {
+            mesh.Clear();
+            mesh = null;
+            vertices = null;
+            triangles = null;
+            meshInstantiated = false;
+        }
 	}
 
-	public void PointRender() {
-		vertices = Parser.getVertices ();
-		for (int i = 0; i < vertices.Length; i++) {
-			//for each point, generate a gameobject? 
-		}
+	public void render()
+	{
+        parent = GameObject.FindWithTag("pointParent").transform;
+        initialScale.Set(1.0f, 1.0f, 1.0f);
+        initialPos.Set(0f, 0f, 0f);
+
+        funcString = GUIManager.function;
+        PointRender(funcString);
+        parent.localScale = initialScale;
+        parent.localPosition = initialPos;
+        parent.localRotation = Parser.normalizationOffset;
+        Parser.normalizationOffset = Quaternion.Euler(0, 0, 0);
 	}
 
-	public void MeshRender() {
-		//setup
-		mesh = GetComponent<MeshFilter> ().mesh;
-		mesh.vertices = Parser.getVertices ();
-		int points = Parser.numPoints ();
-		//set array sizes
-		triangles = new int[points * points * 6];
-		// reset vertex tracker
-		int v = 0;
-		int t = 0;
+	public void PointRender(string function) {
+        mesh = new Mesh();
+        int numPoints = Parser.numPoints();
+        GetComponent<MeshFilter>().mesh = mesh;
 
-		// setting each cell's triangles
-		for (int x = 0; x < points; x++) {
-			for (int y = 0; y < points; y++) {
-				triangles [t] = v;
-				triangles [t + 1] = triangles [t + 4] = v + 1;
-				triangles [t + 2] = triangles [t + 3] = v + (points + 1);
-				triangles [t + 5] = v + (points + 1) + 1;
-				v++;
-				t += 6;
-			}
-			v++;
-		}
-		mesh.triangles = triangles;
-		mesh.RecalculateNormals ();
+        Vector3[] points = Parser.getVertices(function);
+        int[] indices = Parser.getIndices(function);
+        mesh.vertices = points;
+        mesh.colors = Parser.getColors();
+        mesh.SetIndices(indices, MeshTopology.Points, 0);
 	}
 
-//	private void OnDrawGizmos () {
-//		if (vertices == null) {
-//			return;
-//		}
-//		Gizmos.color = Color.black;
-//		for (int i = 0; i < vertices.Length; i++) {
-//			Gizmos.DrawSphere (vertices [i], 0.1f);
-//		}
-//	}
+    public static bool is3DFunc(string func)
+    {
+        return (func.Contains("x") && func.Contains("z") ||
+                func.Contains("x") && func.Contains("y") ||
+                func.Contains("y") && func.Contains("z"));
+    }
 }
 
