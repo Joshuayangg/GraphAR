@@ -4,69 +4,84 @@ using org.mariuszgromada.math.mxparser;
 
 
 [RequireComponent (typeof(MeshFilter), typeof(MeshRenderer))]
-public class Generator : MonoBehaviour {
-	public Mesh mesh;
-    public Transform pointPrefab; //used for pointRender
-    private bool meshInstantiated = false;
+class Generator : MonoBehaviour {
+	private Mesh mesh;
 	private Vector3[] vertices;
-	private int[] triangles;
-    private Transform parent; //used for graph rotation
+	private int[] indices;
     private string funcString;
-    private Vector3 initialScale;
-    private Vector3 initialPos;
+    private int points;
+    private int length;
+    private float gridOffset;
+    private float inv_resolution;
     private Quaternion rotation;
-//	void UpdateMesh() {
-//		mesh.Clear ();
-//		mesh.vertices = vertices;
-//		mesh.triangles = triangles;
-//		mesh.RecalculateNormals ();
-//	}
-	public void Delete() {
-        parent.localScale = initialScale;
-        parent.localPosition = initialPos;
-        if (!is3DFunc(funcString))
+
+	private void Start()
+	{
+        length = GUIManager.resolution * GUIManager.gridSize;
+        gridOffset = length / 2;
+        inv_resolution = 1 / (float) GUIManager.resolution;
+        Debug.Log(inv_resolution);
+        points = (length + 1) * (length + 1);
+        Debug.Log("Begin initialization");
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+        generateVertices();
+        mesh.vertices = vertices;
+        mesh.SetIndices(indices, MeshTopology.Points, 0);
+
+	}
+
+    private static float y_calculator(float x, float z, Function f)
+    {
+        Expression e = new Expression("f(" + x + "," + z + ")", f);
+        if (!e.checkSyntax())
         {
-            foreach (Transform child in parent)
+            Debug.Log("Input is invalid.");
+            return 0f;
+        }
+        return (float)e.calculate();
+    }
+
+    private void generateVertices() {
+        vertices = new Vector3[points];
+        indices = new int[points];
+
+        for (int x = 0, v = 0; x <= length; x++)
+        {
+            for (int z = 0; z <= length; z++)
             {
-                Destroy(child.gameObject);
+                float xval = (x - gridOffset) * inv_resolution;
+                float zval = (z - gridOffset) * inv_resolution;
+
+                vertices[v] = new Vector3(xval, 0, zval);
+                indices[v] = v;
+                v++;
             }
         }
-        if (meshInstantiated) {
-            mesh.Clear();
-            mesh = null;
-            vertices = null;
-            triangles = null;
-            meshInstantiated = false;
+    }
+
+    public void updateMesh(string function) {
+        Function f = new Function(function);
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            float yval = y_calculator(vertices[i].x, vertices[i].z, f);
+            vertices[i].y = yval;
         }
-	}
+        mesh.vertices = vertices;
+        mesh.SetIndices(indices, MeshTopology.Points, 0);
+    }
 
-	public void render()
+	public void Reset()
 	{
-        parent = GameObject.FindWithTag("pointParent").transform;
-        initialScale.Set(1.0f, 1.0f, 1.0f);
-        initialPos.Set(0f, 0f, 0f);
-
-        funcString = GUIManager.function;
-        PointRender(funcString);
-        parent.localScale = initialScale;
-        parent.localPosition = initialPos;
-        parent.localRotation = Parser.normalizationOffset;
-        Parser.normalizationOffset = Quaternion.Euler(0, 0, 0);
-	}
-
-	public void PointRender(string function) {
-        mesh = new Mesh();
-        int numPoints = Parser.numPoints();
-        GetComponent<MeshFilter>().mesh = mesh;
-
-        Vector3[] points = Parser.getVertices(function);
-        int[] indices = Parser.getIndices(function);
-        mesh.vertices = points;
-        mesh.colors = Parser.getColors();
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            vertices[i].y = 0;
+        }
+        mesh.vertices = vertices;
         mesh.SetIndices(indices, MeshTopology.Points, 0);
 	}
 
-    public static bool is3DFunc(string func)
+	public static bool is3DFunc(string func)
     {
         return (func.Contains("x") && func.Contains("z") ||
                 func.Contains("x") && func.Contains("y") ||

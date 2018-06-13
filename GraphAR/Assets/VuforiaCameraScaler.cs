@@ -14,6 +14,7 @@ public class VuforiaCameraScaler : MonoBehaviour {
     void Start()
     {
         ContentScaleManager.ContentScaleChangedEvent += ContentScaleChanged;
+        cameraScale = GUIManager.middle;
     }
 
     void ContentScaleChanged(float scale, float prevScale)

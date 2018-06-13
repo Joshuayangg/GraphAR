@@ -4,18 +4,27 @@ using org.mariuszgromada.math.mxparser;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUIManager : MonoBehaviour
+class GUIManager : MonoBehaviour
 {
-    public static string function = "f(x, z) = sin(x) + cos(z)";
+    static string function = "f(x, z) = sin(x) + cos(z)";
     public static int resolution = 3;
     public static int gridSize = 10;
+    public static int middle;
     public VuforiaCameraScaler scaler;
     public Generator g;
     public InputField input;
     public Text textField;
     public Slider scale;
 
-    public void updateText()
+	private void Awake()
+	{
+        scale.maxValue = 0.01f;
+        scale.minValue = 0;
+        //float middle = (scale.maxValue - scale.minValue) / 2;
+        //scaler.cameraScale = middle;
+        //scale.value = middle;
+	}
+	public void updateText()
     {
         textField.text = input.text;
         function = input.text;
@@ -23,13 +32,13 @@ public class GUIManager : MonoBehaviour
 
     public void delete()
     {
-        g.Delete();
+        g.Reset();
     }
 
     public void begin()
     {
         function = input.text;
-        g.render();
+        g.updateMesh(function);
     }
 
     public void updateScale()
