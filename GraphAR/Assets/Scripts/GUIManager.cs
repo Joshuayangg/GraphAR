@@ -7,7 +7,7 @@ using UnityEngine.UI;
 class GUIManager : MonoBehaviour
 {
     static string function = "f(x, z) = sin(x) + cos(z)";
-    public static int resolution = 3;
+    public static int resolution = 10;
     public static int gridSize = 10;
     public static int middle;
     public VuforiaCameraScaler scaler;

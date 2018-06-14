@@ -31,17 +31,6 @@ class Generator : MonoBehaviour {
 
 	}
 
-    private static float y_calculator(float x, float z, Function f)
-    {
-        Expression e = new Expression("f(" + x + "," + z + ")", f);
-        if (!e.checkSyntax())
-        {
-            Debug.Log("Input is invalid.");
-            return 0f;
-        }
-        return (float)e.calculate();
-    }
-
     private void generateVertices() {
         vertices = new Vector3[points];
         indices = new int[points];
@@ -62,9 +51,10 @@ class Generator : MonoBehaviour {
 
     public void updateMesh(string function) {
         Function f = new Function(function);
+
         for (int i = 0; i < vertices.Length; i++)
         {
-            float yval = y_calculator(vertices[i].x, vertices[i].z, f);
+            float yval = (float) f.calculate(vertices[i].x, vertices[i].z);
             vertices[i].y = yval;
         }
         mesh.vertices = vertices;
