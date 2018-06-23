@@ -15,6 +15,8 @@ class GameObjectGenerator : MonoBehaviour {
     private Quaternion rotation;
     private int gridSize;
     private int yRange;
+    
+    public float scale;
 
 	private void Start()
 	{
@@ -43,6 +45,7 @@ class GameObjectGenerator : MonoBehaviour {
                 Transform point = Instantiate(p);
                 point.parent = this.GetComponent<Transform>();
                 point.localPosition = new Vector3(xval, 0, zval);
+                point.localScale = new Vector3(scale, scale, scale);
                 pointTransforms[i] = point;
                 i++;
             }
@@ -63,9 +66,10 @@ class GameObjectGenerator : MonoBehaviour {
                 if (checkRange(yPos))
                 {
                     Debug.Log(xPos + " " + yPos + " " + zPos);
+                    setVisibility(pointTransforms[i], true);
                     pointTransforms[i].localPosition = new Vector3(xPos, yPos, zPos);
                 } else {
-                    //pointTransforms[i].localScale = new Vector3(0, 0, 0); //will have to figure out how to reset
+                    setVisibility(pointTransforms[i], false);
                 }
             }
         } else {
@@ -75,11 +79,21 @@ class GameObjectGenerator : MonoBehaviour {
                 float yPos = (float)f.calculate(xPos);
                 if (Mathf.Approximately(zPos, 0) && checkRange(yPos))
                 {
+                    setVisibility(pointTransforms[i], true);
                     pointTransforms[i].localPosition = new Vector3(xPos, yPos, zPos);
                 } else {
-                    //pointTransforms[i].localScale = new Vector3(0, 0, 0); //will have to figure out how to reset
+                    setVisibility(pointTransforms[i], false);
                 }
             }
+        }
+    }
+
+    /* Toggles visibility of transforms by manipulating their scale */
+    private void setVisibility(Transform t, bool visible) {
+        if (visible) {
+            t.localScale = new Vector3(scale, scale, scale);
+        } else {
+            t.localScale = new Vector3(0, 0, 0);
         }
     }
     private bool checkRange(float y) {
@@ -90,7 +104,17 @@ class GameObjectGenerator : MonoBehaviour {
     }
 	public void Reset()
 	{
-        initialize();
+        for (int x = 0, i = 0; x <= length; x++)
+        {
+            for (int z = 0; z <= length; z++)
+            {
+                float xval = (x - gridOffset) * inv_resolution;
+                float zval = (z - gridOffset) * inv_resolution;
+                pointTransforms[i].localPosition = new Vector3(xval, 0, zval);
+                setVisibility(pointTransforms[i], true);
+                i++;
+            }
+        }
 	}
 
 	public static bool is3DFunc(string func)

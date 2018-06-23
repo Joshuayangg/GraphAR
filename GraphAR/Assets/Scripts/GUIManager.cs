@@ -7,11 +7,12 @@ using UnityEngine.UI;
 class GUIManager : MonoBehaviour
 {
     static string function = "f(x, z) = sin(x) + cos(z)";
-    public static int resolution = 10;
-    public static int gridSize = 10;
+    public static int resolution = 8;
+    public static int gridSize = 15;
     public static int middle;
     public VuforiaCameraScaler scaler;
     public Generator g;
+    public GameObjectGenerator og;
     public InputField input;
     public Text textField;
     public Slider scale;
@@ -32,13 +33,15 @@ class GUIManager : MonoBehaviour
 
     public void delete()
     {
-        g.Reset();
+        //g.Reset();
+        og.Reset();
     }
 
     public void begin()
     {
         function = input.text;
-        g.updateMesh(function);
+        //g.updateMesh(function);
+        og.update(function);
     }
 
     public void updateScale()
