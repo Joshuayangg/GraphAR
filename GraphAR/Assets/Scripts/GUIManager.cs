@@ -8,7 +8,8 @@ class GUIManager : MonoBehaviour
 {
     static string function = "f(x, z) = sin(x) + cos(z)";
     public static int resolution = 8;
-    public static int gridSize = 15;
+    public static int gridSize = 6;
+    public static bool graphGenerated = false;
     public static int middle;
     public VuforiaCameraScaler scaler;
     public Generator g;
@@ -19,7 +20,7 @@ class GUIManager : MonoBehaviour
 
 	private void Awake()
 	{
-        scale.maxValue = 0.01f;
+        scale.maxValue = 1f;
         scale.minValue = 0;
         //float middle = (scale.maxValue - scale.minValue) / 2;
         //scaler.cameraScale = middle;
@@ -41,11 +42,19 @@ class GUIManager : MonoBehaviour
     {
         function = input.text;
         //g.updateMesh(function);
-        og.update(function);
+        og.generateGraph(function);
     }
 
     public void updateScale()
     {
         scaler.cameraScale = scale.value; 
+    }
+
+    void Update() {
+        if (graphGenerated) {
+            // Puts scaler camera behind main camera everytime graph as finished generating
+            updateScale(); 
+            graphGenerated = false;
+        }
     }
 }
