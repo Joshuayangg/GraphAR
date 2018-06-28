@@ -247,6 +247,7 @@ MonoBehaviour:
   vuforiaCamera: {fileID: 2032239596}
   AnchorStage: {fileID: 121668346}
   cameraScale: 0.15
+  cameraRotation: 0
 --- !u!1 &293907953
 GameObject:
   m_ObjectHideFlags: 0

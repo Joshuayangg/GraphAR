@@ -9,6 +9,7 @@ public class VuforiaCameraScaler : MonoBehaviour {
     public GameObject AnchorStage;
     //public Vector3 scaledObjectOrigin; //ARKit version
     public float cameraScale = 1.0f;
+    public float cameraRotation = 0.0f;
 
     // Use this for initialization
     void Start()
@@ -20,6 +21,10 @@ public class VuforiaCameraScaler : MonoBehaviour {
     void ContentScaleChanged(float scale, float prevScale)
     {
         cameraScale = scale;
+    }
+
+    void ContentRotationChanged(float rotation, float prevRotation) {
+        cameraRotation = rotation;
     }
 
 
@@ -37,6 +42,7 @@ public class VuforiaCameraScaler : MonoBehaviour {
             scaledCamera.transform.localPosition = AnchorStage.transform.position + (vecAnchorToCamera * invScale);
             //scaledCamera.transform.localRotation = UnityARMatrixOps.GetRotation (matrix); //ARKit version
             scaledCamera.transform.localRotation = vuforiaCamera.transform.localRotation; //My Vuforia version
+            scaledCamera.transform.Rotate(0, cameraRotation, 0);
 
 
             //this needs to be adjusted for near/far
