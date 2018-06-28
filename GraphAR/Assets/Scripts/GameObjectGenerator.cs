@@ -119,7 +119,6 @@ class GameObjectGenerator : MonoBehaviour {
                         setVisibility(pointTransforms[i], false);
                     }
                 }
-
                 i++;
             }
         }
@@ -161,6 +160,7 @@ class GameObjectGenerator : MonoBehaviour {
                 Destroy(point.gameObject);
             }
         }
+        graphs.Clear();
 	}
 
 	public static bool is3DFunc(string func)
