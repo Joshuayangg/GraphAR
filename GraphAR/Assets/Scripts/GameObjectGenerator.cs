@@ -77,6 +77,7 @@ class GameObjectGenerator : MonoBehaviour {
     }*/
 
     public void generateGraph(string function) {
+        reset();
         Function f = new Function(function);
         //Function f = normalizeFunc(function);
         Transform a = Instantiate(axis);
@@ -143,7 +144,7 @@ class GameObjectGenerator : MonoBehaviour {
     private float normalize(float y) {
         return (y - (-yRange)) / (gridSize);
     }
-	public void Reset()
+	public void reset()
 	{
         /*for (int x = 0, i = 0; x <= length; x++)
         {

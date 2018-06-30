@@ -35,7 +35,7 @@ class GUIManager : MonoBehaviour
     public void delete()
     {
         //g.Reset();
-        og.Reset();
+        og.reset();
     }
 
     public void begin()
