@@ -19,7 +19,9 @@ class GameObjectGenerator : MonoBehaviour {
     private Quaternion rotation;
     private int gridSize;
     private int yRange;
-    
+    public Camera ARCamera;
+
+
     public float scale;
 
 
@@ -80,8 +82,11 @@ class GameObjectGenerator : MonoBehaviour {
         reset();
         Function f = new Function(function);
         //Function f = normalizeFunc(function);
+        Transform c = ARCamera.transform;
+        Transform parent = this.GetComponent<Transform>();
+        parent.localPosition = c.position;
         Transform a = Instantiate(axis);
-        a.localPosition = new Vector3(0, 0.16f, 0);
+        a.localPosition = c.position;
 
         Transform[] pointTransforms = new Transform[points];
 
