@@ -6,6 +6,7 @@ using org.mariuszgromada.math.mxparser;
 class GameObjectGenerator : MonoBehaviour {
 
     public Transform p; //Point transform
+    public Transform axis;
 	private Mesh mesh;
     private List<Graph> graphs;
 
@@ -78,6 +79,8 @@ class GameObjectGenerator : MonoBehaviour {
     public void generateGraph(string function) {
         Function f = new Function(function);
         //Function f = normalizeFunc(function);
+        Transform a = Instantiate(axis);
+        a.localPosition = new Vector3(0, 0.16f, 0);
 
         Transform[] pointTransforms = new Transform[points];
 

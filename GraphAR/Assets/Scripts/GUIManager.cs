@@ -8,7 +8,7 @@ class GUIManager : MonoBehaviour
 {
     static string function = "f(x, z) = sin(x) + cos(z)";
     public static int resolution = 8;
-    public static int gridSize = 6;
+    public static int gridSize = 10;
     public static bool graphGenerated = false;
     public static int middle;
     public VuforiaCameraScaler scaler;
