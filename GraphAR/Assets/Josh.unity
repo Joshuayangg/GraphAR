@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.496413, b: 0.5748175, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -860,7 +860,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
     m_TypeName: Vuforia.MidAirPositionerBehaviour+AnchorPositionConfirmedEvent, Vuforia.UnityExtensions,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   mDisplayAdvanced: 1
@@ -2255,6 +2255,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p: {fileID: 4510791204467392, guid: 926ab86e018cf4081a2d917d7266234a, type: 2}
   axis: {fileID: 4989248084529926, guid: eba50f536617d4618a9905df523ff389, type: 2}
+  positioner: {fileID: 1124813796}
+  ARCamera: {fileID: 2060220644}
   scale: 0.13
 --- !u!23 &2140462734
 MeshRenderer:

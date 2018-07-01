@@ -7,6 +7,8 @@ class GameObjectGenerator : MonoBehaviour {
 
     public Transform p; //Point transform
     public Transform axis;
+
+    public Transform positioner;
 	private Mesh mesh;
     private List<Graph> graphs;
 
@@ -31,13 +33,19 @@ class GameObjectGenerator : MonoBehaviour {
      * (the latter is supported right now). */
     class Graph {
         Transform[] pointTransforms;
+        Transform axis;
 
-        public Graph(Transform[] points){
-            pointTransforms = points;
+        public Graph(Transform[] points, Transform axis){
+            this.pointTransforms = points;
+            this.axis = axis;
         }
 
         public Transform[] getPointTransforms() {
-            return pointTransforms;
+            return this.pointTransforms;
+        }
+
+        public Transform getAxis() {
+            return this.axis;
         }
     }
 
@@ -80,13 +88,15 @@ class GameObjectGenerator : MonoBehaviour {
 
     public void generateGraph(string function) {
         reset();
+        showPositionerDot(false);
         Function f = new Function(function);
         //Function f = normalizeFunc(function);
         Transform c = ARCamera.transform;
         Transform parent = this.GetComponent<Transform>();
-        parent.localPosition = c.position;
+        //parent.localPosition = new Vector3(c.position.x, c.position.y, c.position.z + 0.2f);
         Transform a = Instantiate(axis);
-        a.localPosition = c.position;
+        //a.localPosition = new Vector3(c.position.x, c.position.y, c.position.z + 0.2f);
+        a.localPosition = new Vector3(0, 0, 0);
 
         Transform[] pointTransforms = new Transform[points];
 
@@ -132,7 +142,7 @@ class GameObjectGenerator : MonoBehaviour {
             }
         }
         GUIManager.graphGenerated = true; // This is to get the content scaler camera aligned to the AR camera
-        graphs.Add(new Graph(pointTransforms));
+        graphs.Add(new Graph(pointTransforms, a));
     }
 
     /* Toggles visibility of transforms by manipulating their scale */
@@ -168,7 +178,9 @@ class GameObjectGenerator : MonoBehaviour {
             foreach(Transform point in graph.getPointTransforms()) {
                 Destroy(point.gameObject);
             }
+            Destroy(graph.getAxis().gameObject);
         }
+        showPositionerDot(true);
         graphs.Clear();
 	}
 
@@ -177,6 +189,14 @@ class GameObjectGenerator : MonoBehaviour {
         return (func.Contains("x") && func.Contains("z") ||
                 func.Contains("x") && func.Contains("y") ||
                 func.Contains("y") && func.Contains("z"));
+    }
+
+    // This currently doesn't work and doesn't change the scale of the actual dot
+    public void showPositionerDot(bool show) {
+        if (show)
+            positioner.transform.localScale = new Vector3(1,1,1);
+        else
+            positioner.transform.localScale = new Vector3(0,0,0);
     }
 
     /* TODO: Make this work!!!
