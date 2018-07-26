@@ -2,3 +2,9 @@ sceneSetups:
 - path: Assets/Josh.unity
   isLoaded: 1
   isActive: 1
+- path: Assets/SamplesResources/Scenes/3-GroundPlane.unity
+  isLoaded: 0
+  isActive: 0
+- path: Assets/Josh2.unity
+  isLoaded: 0
+  isActive: 0

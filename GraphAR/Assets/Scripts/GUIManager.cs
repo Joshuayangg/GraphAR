@@ -7,9 +7,10 @@ using UnityEngine.UI;
 class GUIManager : MonoBehaviour
 {
     static string function = "f(x, z) = sin(x) + cos(z)";
-    public static int resolution = 8;
-    public static int gridSize = 6;
+    public static int resolution = 5;
+    public static int gridSize = 15;
     public static bool graphGenerated = false;
+    public MidAirPlaneManager planeManager; 
     public static int middle;
     public VuforiaCameraScaler scaler;
     public Generator g;
@@ -42,6 +43,7 @@ class GUIManager : MonoBehaviour
     {
         function = input.text;
         //g.updateMesh(function);
+        //planeManager.ResetScene();
         og.generateGraph(function);
     }
 

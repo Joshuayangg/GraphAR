@@ -95,6 +95,8 @@ class GameObjectGenerator : MonoBehaviour {
         Transform parent = this.GetComponent<Transform>();
         //parent.localPosition = new Vector3(c.position.x, c.position.y, c.position.z + 0.2f);
         Transform a = Instantiate(axis);
+        a.parent = parent.parent; // Set parent to midair stage
+        a.localScale = new Vector3(0.10f,0.10f,0.10f);
         //a.localPosition = new Vector3(c.position.x, c.position.y, c.position.z + 0.2f);
         a.localPosition = new Vector3(0, 0, 0);
 
