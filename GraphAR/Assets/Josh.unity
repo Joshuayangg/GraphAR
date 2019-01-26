@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.496413, b: 0.5748175, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641287, b: 0.5748173, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -342,6 +342,7 @@ MonoBehaviour:
   input: {fileID: 1606218471}
   textField: {fileID: 1998125039}
   scale: {fileID: 2032602682}
+  tapScreenText: {fileID: 677239226}
 --- !u!4 &185103316
 Transform:
   m_ObjectHideFlags: 0
@@ -615,7 +616,7 @@ MonoBehaviour:
   axis: {fileID: 4989248084529926, guid: eba50f536617d4618a9905df523ff389, type: 2}
   positioner: {fileID: 1124813796}
   ARCamera: {fileID: 2060220644}
-  scale: 0.13
+  scale: 0.1
 --- !u!23 &311978802
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1022,6 +1023,81 @@ Transform:
   m_Father: {fileID: 1840678256}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &677239224
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 677239225}
+  - component: {fileID: 677239227}
+  - component: {fileID: 677239226}
+  m_Layer: 5
+  m_Name: TapScreenText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &677239225
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 677239224}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.0000125, y: 1.0000125, z: 1.0000125}
+  m_Children: []
+  m_Father: {fileID: 1540202093}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 20.69999, y: -758}
+  m_SizeDelta: {x: 674.2, y: 204.90002}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &677239226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 677239224}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 150
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 1
+    m_MaxSize: 200
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Tap the screen to place graph
+--- !u!222 &677239227
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 677239224}
+  m_CullTransparentMesh: 0
 --- !u!1 &752910437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,14 +1194,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DistanceToCamera: 0.7
-  MidAirIndicator: {fileID: 1080097101365934, guid: e76f0709e06504dc587bd8e8491c9f07,
-    type: 2}
+  MidAirIndicator: {fileID: 0}
   OnAnchorPositionConfirmed:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 319410443}
         m_MethodName: PlaceObjectInMidAir
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 185103315}
+        m_MethodName: disableTapScreenText
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1194,7 +1280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1218913788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1440,6 +1526,7 @@ RectTransform:
   - {fileID: 1606218474}
   - {fileID: 567585563}
   - {fileID: 2032602681}
+  - {fileID: 677239225}
   m_Father: {fileID: 2060220645}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2220,7 +2307,7 @@ GameObject:
   - component: {fileID: 1998125040}
   - component: {fileID: 1998125039}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -8,3 +8,6 @@ sceneSetups:
 - path: Assets/Josh2.unity
   isLoaded: 0
   isActive: 0
+- path: Assets/Axis Measurement Test.unity
+  isLoaded: 0
+  isActive: 0

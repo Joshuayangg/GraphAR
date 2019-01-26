@@ -12,7 +12,7 @@ Shader "Custom/ColoredPoint" {
 		LOD 200
 		
 		CGPROGRAM
-		#pragma surface surf Standard fullforwardshadows
+		#pragma surface surf Lambert vertex:vert
 
 		#pragma target 3.0
 
@@ -20,7 +20,14 @@ Shader "Custom/ColoredPoint" {
 
 		struct Input {
 			float3 worldPos;
+			float2 uv_MainTex;
+   			float3 localPos;
 		};
+ 
+ 		void vert (inout appdata_full v, out Input o) {
+   			UNITY_INITIALIZE_OUTPUT(Input,o);
+   			o.localPos = v.vertex.xyz;
+ 		}			
 
 		half _Glossiness;
 		half _Metallic;
@@ -29,14 +36,14 @@ Shader "Custom/ColoredPoint" {
 		UNITY_INSTANCING_BUFFER_START(Props)
 		UNITY_INSTANCING_BUFFER_END(Props)
 
-		void surf (Input IN, inout SurfaceOutputStandard o) {
+		void surf (Input IN, inout SurfaceOutput o) {
 //			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 //			o.Albedo = c.rgb;
-			o.Metallic = _Metallic;
-			o.Smoothness = _Glossiness;
+			//o.Metallic = _Metallic;
+			//o.Smoothness = _Glossiness;
 //			o.Alpha = c.a;
 			o.Alpha = 1;
-			o.Albedo.rg = IN.worldPos.xy * 3 + 0.4;
+			o.Albedo.rgb = IN.localPos * 3 + 0.4;
 		}
 		ENDCG
 	}

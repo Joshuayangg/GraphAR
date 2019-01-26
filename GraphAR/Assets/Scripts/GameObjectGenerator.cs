@@ -21,6 +21,8 @@ class GameObjectGenerator : MonoBehaviour {
     private Quaternion rotation;
     private int gridSize;
     private int yRange;
+
+    private Transform parent;
     public Camera ARCamera;
 
 
@@ -61,6 +63,12 @@ class GameObjectGenerator : MonoBehaviour {
         points = (length + 1) * (length + 1);
         Debug.Log("Begin initialization");
         graphs = new List<Graph>();
+
+        parent = this.GetComponent<Transform>();
+
+        // Adjust scale based on gridSize (10 is size that the axis covers)
+        float parentScale = 0.2f * 1/(gridSize/10f);
+        parent.localScale = new Vector3(parentScale, parentScale, parentScale);
         //pointTransforms = new Transform[points];
         //initialize();
 
@@ -92,7 +100,7 @@ class GameObjectGenerator : MonoBehaviour {
         Function f = new Function(function);
         //Function f = normalizeFunc(function);
         Transform c = ARCamera.transform;
-        Transform parent = this.GetComponent<Transform>();
+        parent = this.GetComponent<Transform>();
         //parent.localPosition = new Vector3(c.position.x, c.position.y, c.position.z + 0.2f);
         Transform a = Instantiate(axis);
         a.parent = parent.parent; // Set parent to midair stage

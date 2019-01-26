@@ -7,8 +7,8 @@ using UnityEngine.UI;
 class GUIManager : MonoBehaviour
 {
     static string function = "f(x, z) = sin(x) + cos(z)";
-    public static int resolution = 5;
-    public static int gridSize = 15;
+    public static int resolution = 10;
+    public static int gridSize = 20;
     public static bool graphGenerated = false;
     public MidAirPlaneManager planeManager; 
     public static int middle;
@@ -19,10 +19,15 @@ class GUIManager : MonoBehaviour
     public Text textField;
     public Slider scale;
 
+    public Text tapScreenText;
+
+    private bool firstGeneration;
+
 	private void Awake()
 	{
         scale.maxValue = 1f;
         scale.minValue = 0;
+        firstGeneration = true;
         //float middle = (scale.maxValue - scale.minValue) / 2;
         //scaler.cameraScale = middle;
         //scale.value = middle;
@@ -31,6 +36,17 @@ class GUIManager : MonoBehaviour
     {
         textField.text = input.text;
         function = input.text;
+
+        if (firstGeneration) {
+            tapScreenText.enabled = true;
+            firstGeneration = false;
+        }
+    }
+
+    public void disableTapScreenText() {
+        if (tapScreenText.enabled == true) {
+            tapScreenText.enabled = false;
+        }
     }
 
     public void delete()

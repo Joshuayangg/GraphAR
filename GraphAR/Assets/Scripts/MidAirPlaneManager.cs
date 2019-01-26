@@ -127,7 +127,6 @@ public class MidAirPlaneManager : MonoBehaviour
             Debug.LogError("Invalid hit test result!");
             return;
         }
-
         //if (!m_GroundPlaneUI.IsCanvasButtonPressed()) WILL BE VERY USEFUL IN FUTURE
         //{
             Debug.Log("HandleInteractiveHitTest() called.");
