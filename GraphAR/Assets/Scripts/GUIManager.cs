@@ -74,5 +74,8 @@ class GUIManager : MonoBehaviour
             updateScale(); 
             graphGenerated = false;
         }
+
+        // Make sure screen orientation is portrait
+        Screen.orientation = ScreenOrientation.Portrait;
     }
 }
